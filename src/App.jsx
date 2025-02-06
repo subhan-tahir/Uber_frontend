@@ -13,6 +13,7 @@ import CaptainRiding from './pages/CaptainRiding'
 import './App.css'
 import AnimatePanelProvider from './context/AnimatePanelContext'
 import InternetDisconnectPopup from './Components/InternetDisconnectPopup'
+import { ToastContainer } from 'react-toastify'
 const App = () => {
   return (
     <>
@@ -42,6 +43,20 @@ const App = () => {
 
       </Routes>
       <InternetDisconnectPopup />
+      {/*toast-container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        // transition={Bounce}
+      />
     </>
   )
 }
