@@ -14,21 +14,20 @@ import './App.css'
 import AnimatePanelProvider from './context/AnimatePanelContext'
 import InternetDisconnectPopup from './Components/InternetDisconnectPopup'
 const App = () => {
-console.log('checking....')
   return (
     <>
       <Routes>
-        
+
         <Route path='/' element={<Home />} />
         {/* Protected Route */}
-
         <Route path='/dashboard' element={
           <Private>
             <AnimatePanelProvider>
               <Dashboard />
             </AnimatePanelProvider>
           </Private>
-        }></Route>
+        }>
+        </Route>
 
 
         {/* public Routes */}
