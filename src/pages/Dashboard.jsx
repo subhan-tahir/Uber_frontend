@@ -99,7 +99,7 @@ const Dashboard = () => {
   return (
     <>
       <div className='relative h-screen overflow-hidden'>
-          <button onClick={logoutHandler} className='text-[27px] bg-white rounded-full h-[40px] w-[40px] flex items-center justify-center absolute right-0 m-2 z-20'><MdLogout /></button>
+          <button onClick={logoutHandler} className='text-[27px] bg-white rounded-full h-[40px] w-[40px] flex items-center justify-center absolute right-0 m-2 z-30'><MdLogout /></button>
         <div className='flex items-center justify-between absolute px-4 top-5 w-full z-10 mt-10'>
           <img className='w-16' src={Uber_logo} alt="Uber Logo" />
         <div className='bg-black text-white font-bold text-[25px] w-[45px] h-[45px] rounded-full flex items-center justify-center  '>{userCharacter}</div>
