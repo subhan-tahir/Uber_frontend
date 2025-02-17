@@ -1,4 +1,4 @@
-import React, { useContext, useState,useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -40,7 +40,8 @@ const UserLogin = () => {
 
     try {
       setLoader(true);
-      const response = await axios.post('http://localhost:4000/Uber-users/login', data);
+      // const response = await axios.post('http://localhost:4000/Uber-users/login', data);
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_BASE_URL}/Uber-users/login`, data);
       // console.log(response.data.data.message)
       if (response.status === 200) {
         navigate('/dashboard');
@@ -51,7 +52,7 @@ const UserLogin = () => {
         toast.success(`Welcome, ${responseData.user.fullname.firstname}`);
         localStorage.setItem('token', responseData.token);
         localStorage.setItem('userCharacter', userCharacter);
-        
+
       }
 
     }
@@ -71,12 +72,12 @@ const UserLogin = () => {
   let passwordVisibilityHandler = () => {
     setPasswordVisible(!passwordVisible)
   }
-
+  {/*useEffect runs after state updates and prevent to re-rendering component */ }
   useEffect(() => {
     if (userCharacter) {
       localStorage.setItem('userCharacter', userCharacter);
     }
-  }, [userCharacter]);
+  }, [userCharacter]);//dependeci
 
   return (
     <div className='p-5 flex flex-col justify-between h-screen'>

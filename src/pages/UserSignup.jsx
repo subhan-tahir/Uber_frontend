@@ -50,7 +50,7 @@ const UserSignup = () => {
     console.log('Submitting data:', data);
     try {
       setLoader(true)
-      const response = await axios.post('http://localhost:4000/Uber-users/register', payload);
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_BASE_URL}/Uber-users/register`, payload);
       console.log('API Response:', response);
       if (response.status === 200 || response.status === 201) {
         navigate('/dashboard');
