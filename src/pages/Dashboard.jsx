@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { MdLogout } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
+import LiveTracking from '../Components/LiveTracking';
 const Dashboard = () => {
   const navigator = useNavigate();
   const [pickup, setPickup] = useState('');
@@ -75,6 +76,7 @@ const Dashboard = () => {
 
   const onSubmit = async () => {
     setActivePanel("vehiclePanel");
+
     // if(activePanel === 'vehiclePanel'){
     //   activePanel(null)
     // }
@@ -99,16 +101,23 @@ const Dashboard = () => {
   return (
     <>
       <div className='relative h-screen overflow-hidden'>
-          <button onClick={logoutHandler} className='text-[27px] bg-white rounded-full h-[40px] w-[40px] flex items-center justify-center absolute right-0 m-2 z-30'><MdLogout /></button>
-        <div className='flex items-center justify-between absolute px-4 top-5 w-full z-10 mt-10'>
-          <img className='w-16' src={Uber_logo} alt="Uber Logo" />
-        <div className='bg-black text-white font-bold text-[25px] w-[45px] h-[45px] rounded-full flex items-center justify-center  '>{userCharacter}</div>
+
+        <div className='flex flex-col gap-5 absolute top-5 px-4 w-full'>
+          <div className='flex items-center justify-between  w-full z-10 mt-10'>
+            <img className='w-16' src={Uber_logo} alt="Uber Logo" />
+            <span className='bg-black text-white font-bold text-[25px] w-[45px] h-[45px] rounded-full flex items-center justify-center  '>{userCharacter}</span>
+          </div>
+          {/*logout button */}
+          <div className='flex flex-1 justify-end'>
+            <button onClick={logoutHandler} className={`text-[27px] bg-white rounded-full h-[40px] w-[40px] flex items-center justify-center   ${!activePanel ? 'z-30' : ''}`}><MdLogout /></button>
+          </div>
+
         </div>
-        <div className='h-screen w-full'>
-          <img className='w-full h-full object-cover' src="https://images.squarespace-cdn.com/content/v1/5a05f520f6576e6135323430/1570233092180-KY4SR5HLAZ42H8UF73IF/v3.png" alt="Map" />
+        <div className='h-[60%] w-full relative'>
+          <LiveTracking />
         </div>
-        <div className={`flex flex-col justify-end absolute top-0 w-full h-full ${activePanel ? 'z-20' : ''} ${activePanel === 'vehiclePanel' ? 'hidden' : ''}`}>
-          <div className='h-[47%] p-5 bg-white relative'>
+        <div className={`flex flex-col  absolute  w-full  ${activePanel === "topPanel" ? 'z-30 top-0 h-full' : '-z-1 bottom-0 h-[40%]'} ${activePanel === 'vehiclePanel' ? 'hidden' : ''}`}>
+          <div className='p-5 bg-white relative'>
             <h4 className='text-3xl font-semibold flex items-center justify-between'>
               Find a trip
               <span className={`${activePanel ? 'opacity-1' : 'opacity-0'}`}>

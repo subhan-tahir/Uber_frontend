@@ -108,7 +108,7 @@ const UserLogin = () => {
               placeholder='password'
               {...register('password')}
               autoComplete="current-password"
-              className={` bg-transparent rounded outline-none border w-full text-lg placeholder:text-base`}
+              className={` bg-transparent rounded outline-none  w-full text-lg placeholder:text-base`}
             />
             <span className='cursor-pointer text-md ' onClick={passwordVisibilityHandler}>{passwordVisible ? (<IoEye />) : (<FaEyeSlash />)}</span>
 

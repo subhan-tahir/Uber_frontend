@@ -19,7 +19,7 @@ const AnimatePanelContext = ({ children }) => {
       if (key === "topPanel") {
         // Animate height for topPanel
         gsap.to(ref.current, {
-          height: activePanel === "topPanel" ? "60%" : "0%",
+          height: activePanel === "topPanel" ? "50%" : "0%",
           padding: activePanel === "topPanel" ? 24 : 0,
           duration: 0.5,
           ease: "power2.out",
