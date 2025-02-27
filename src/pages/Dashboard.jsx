@@ -13,6 +13,8 @@ import { useForm } from 'react-hook-form';
 import { MdLogout } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import LiveTracking from '../Components/LiveTracking';
+import EditProfileSidebar from '../Components/EditProfileSidebar';
+import { InternetDisconnectivityContext } from '../context/InternetDisconnectPopupContext';
 const Dashboard = () => {
   const navigator = useNavigate();
   const [pickup, setPickup] = useState('');
@@ -22,8 +24,11 @@ const Dashboard = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [fare, setFare] = useState('');
   const [userCharacter, setUserCharacter] = useState('');
+  const [openAccountSidebar, setOpenAccountSidebar] = useState(false);
   const { setActivePanel, panelRefs, activePanel } = useContext(AnimatePanelProvider);
   const BASE_URL = import.meta.env.VITE_APP_BACKEND_BASE_URL;
+
+const isOnline = useContext(InternetDisconnectivityContext)
 
   const validationSchema = Yup.object().shape({
     pickup: Yup.string().required('Pick-up location is required'),
@@ -39,13 +44,16 @@ const Dashboard = () => {
   });
 
   const fetchSuggestions = async (query) => {
+    console.log(query);
     try {
       const response = await axios.get(`${BASE_URL}/maps/get-suggestions?input=${query}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+      console.log('suggestion')
       setSuggestions(response.data);
+    
     } catch (error) {
       console.error('Error fetching location suggestions:', error);
     }
@@ -54,6 +62,7 @@ const Dashboard = () => {
   const handleSelectSuggestion = (location) => {
     if (searchType === "pickup") {
       setPickup(location);
+      console.log(pickup);
     } else if (searchType === "destination") {
       setDestination(location);
     }
@@ -94,10 +103,16 @@ const Dashboard = () => {
     localStorage.removeItem('token');
     navigator('/login', { replace: true });
   };
+
+  const editProfileHandler = () => {
+    setOpenAccountSidebar(true);
+};
+
   useEffect(() => {
+
     const userFirstCHaracter = localStorage.getItem('userCharacter');
     setUserCharacter(userFirstCHaracter);
-  }, [userCharacter])
+  }, [])
   return (
     <>
       <div className='relative h-screen overflow-hidden'>
@@ -105,8 +120,13 @@ const Dashboard = () => {
         <div className='flex flex-col gap-5 absolute top-5 px-4 w-full'>
           <div className='flex items-center justify-between  w-full z-10 mt-10'>
             <img className='w-16' src={Uber_logo} alt="Uber Logo" />
-            <span className='bg-black text-white font-bold text-[25px] w-[45px] h-[45px] rounded-full flex items-center justify-center  '>{userCharacter}</span>
+            {/*profile button */}
+           <button onClick={editProfileHandler}> <span className='bg-black text-white font-bold text-[25px] w-[45px] h-[45px] rounded-full flex items-center justify-center  '>{userCharacter}</span></button>
           </div>
+
+          {openAccountSidebar && <EditProfileSidebar closedSidebar={()=>setOpenAccountSidebar(false)} userCharacter={userCharacter} isOpen={openAccountSidebar}/>} 
+
+
           {/*logout button */}
           <div className='flex flex-1 justify-end'>
             <button onClick={logoutHandler} className={`text-[27px] bg-white rounded-full h-[40px] w-[40px] flex items-center justify-center   ${!activePanel ? 'z-30' : ''}`}><MdLogout /></button>
@@ -114,7 +134,7 @@ const Dashboard = () => {
 
         </div>
         <div className='h-[60%] w-full relative'>
-          <LiveTracking />
+          <LiveTracking pickup={pickup} destination={destination}/>
         </div>
         <div className={`flex flex-col  absolute  w-full  ${activePanel === "topPanel" ? 'z-30 top-0 h-full' : '-z-1 bottom-0 h-[40%]'} ${activePanel === 'vehiclePanel' ? 'hidden' : ''}`}>
           <div className='p-5 bg-white relative'>
@@ -127,32 +147,38 @@ const Dashboard = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               {/*pickup field */}
               <input
+              autoComplete='off'
                 {...register('pickup')}
                 onClick={() => { setSearchType('pickup'); setActivePanel("topPanel") }}
                 value={pickup}
                 onChange={(e) => { setPickup(e.target.value); fetchSuggestions(e.target.value); }}
                 className={`outline-none bg-[#eee] px-12 py-2 text-base border-2 border-white rounded-lg w-full mt-5 ${errors.pickup && touchedFields.pickup ? '!border-red-500'
-                  : ''}`}
+                  : ''} ${isOnline ? '' : 'opacity-50'}`}
                 type="text"
                 placeholder="Add a pick-up location"
+                disabled={!isOnline}
               />
               {errors.pickup && (
                 <p className="text-red-500 text-sm">{errors.pickup.message}</p>
               )}
               {/*destination field */}
               <input
+               autoComplete='off'
                 {...register('destination')}
                 onClick={() => { setSearchType('destination'); setActivePanel("topPanel") }}
                 value={destination}
-                onChange={(e) => { setDestination(e.target.value); fetchSuggestions(e.target.value); }}
-                className={`outline-none bg-[#eee] px-12 py-2 text-base border-white rounded-lg w-full border-2 mt-5 ${errors.destination && touchedFields.destination ? '!border-red-500' : ''}`}
+                onChange={(e) => {setDestination(e.target.value); fetchSuggestions(e.target.value); }}
+                className={`outline-none bg-[#eee] px-12 py-2 text-base border-white rounded-lg w-full border-2 mt-5 ${errors.destination && touchedFields.destination ? '!border-red-500' : ''} ${isOnline  ? '' : 'opacity-50'}`}
                 type="text"
                 placeholder="Enter your destination"
+                disabled={!isOnline}
               />
               {errors.destination && (
                 <p className="text-red-500 text-sm">{errors.destination.message}</p>
               )}
-              <button className='text-center text-lg w-full bg-black mt-4 text-white font-semibold mb-2 rounded px-4 py-2'>
+              <button className={`text-center text-lg w-full  mt-4 text-white font-semibold mb-2 rounded px-4 py-2 ${isOnline ? 'bg-black' : 'bg-gray-400 opacity-50 cursor-not-allowed'}`}
+              disabled={!isOnline}
+              >
                 Find trip
               </button>
             </form>

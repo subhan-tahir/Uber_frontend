@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import Uber_logo from '../assets/Uber_logo.png';
 import { Link, useNavigate } from 'react-router-dom';
-// import { UserDataContext } from '../context/UserContext';
+import { UserDataContext } from '../context/UserContext';
 import { IoEye } from "react-icons/io5";
 import { FaEyeSlash } from "react-icons/fa";
 import axios from 'axios';
@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import { CircularProgress } from '@mui/material';
 
 const UserLogin = () => {
-  // const { setUser } = useContext(UserDataContext);
+  const { setUser } = useContext(UserDataContext);
   const navigate = useNavigate();
   const [backendError, setBackendError] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -45,13 +45,18 @@ const UserLogin = () => {
       // console.log(response.data.data.message)
       if (response.status === 200) {
         navigate('/dashboard');
+        
         const responseData = response.data;
+        setUser(responseData.user)
         const userName = responseData.user.fullname.firstname;
         const firstCharacterOfUsername = userName.charAt(0).toUpperCase();
         setUserCharacter(firstCharacterOfUsername);
         toast.success(`Welcome, ${responseData.user.fullname.firstname}`);
         localStorage.setItem('token', responseData.token);
         localStorage.setItem('userCharacter', userCharacter);
+        localStorage.setItem('userId', responseData.user._id);
+        localStorage.setItem('username', responseData.user.fullname.firstname);
+        localStorage.setItem('userEmail', responseData.user.email);
 
       }
 
@@ -77,6 +82,7 @@ const UserLogin = () => {
     if (userCharacter) {
       localStorage.setItem('userCharacter', userCharacter);
     }
+   
   }, [userCharacter]);//dependeci
 
   return (
