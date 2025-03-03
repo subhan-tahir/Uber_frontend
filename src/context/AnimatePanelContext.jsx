@@ -33,7 +33,7 @@ const AnimatePanelContext = ({ children }) => {
         });
       }
     });
-  }, [activePanel]);
+  }, []);
 
   return (
     <AnimatePanelProvider.Provider value={{ setActivePanel, panelRefs,activePanel }}>

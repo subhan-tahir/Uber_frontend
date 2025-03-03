@@ -24,11 +24,11 @@ const EditProfileSidebar = ({ closedSidebar, userCharacter, isOpen }) => {
             reader.readAsDataURL(file);
             reader.onloadend = () => {
                 setImage(reader.result);
-                setImageError(true); // ✅ Remove error border when user selects an image
+                setImageError(true); 
             };
         } else {
             setImage(null);
-            setImageError(true); // ✅ If no image is selected, show error
+            setImageError(false);
         }
     };
 
@@ -49,7 +49,7 @@ const EditProfileSidebar = ({ closedSidebar, userCharacter, isOpen }) => {
             );
 
             if (response.status === 200) {
-                console.log('Profile image updated:', response.data.profileData.image);
+             
                 setUser(response.data);
                 setUploadedImage(response.data.profileData.image);
                 setImage(null);

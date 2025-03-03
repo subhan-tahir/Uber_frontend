@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom';
 import LiveTracking from '../Components/LiveTracking';
 import EditProfileSidebar from '../Components/EditProfileSidebar';
 import { InternetDisconnectivityContext } from '../context/InternetDisconnectPopupContext';
+
+
 const Dashboard = () => {
   const navigator = useNavigate();
   const [pickup, setPickup] = useState('');
@@ -37,7 +39,7 @@ const isOnline = useContext(InternetDisconnectivityContext)
 
   const {
     register,
-    handleSubmit, // Fixed this
+    handleSubmit,
     formState: { errors, touchedFields },
   } = useForm({
     resolver: yupResolver(validationSchema),
@@ -137,7 +139,7 @@ const isOnline = useContext(InternetDisconnectivityContext)
           <LiveTracking pickup={pickup} destination={destination}/>
         </div>
         <div className={`flex flex-col  absolute  w-full  ${activePanel === "topPanel" ? 'z-30 top-0 h-full' : '-z-1 bottom-0 h-[40%]'} ${activePanel === 'vehiclePanel' ? 'hidden' : ''}`}>
-          <div className='p-5 bg-white relative'>
+          <div className='p-3 bg-white relative'>
             <h4 className='text-3xl font-semibold flex items-center justify-between'>
               Find a trip
               <span className={`${activePanel ? 'opacity-1' : 'opacity-0'}`}>
